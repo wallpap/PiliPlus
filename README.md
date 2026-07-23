@@ -12,7 +12,7 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/wallpap/PiliPlus) 
 ![GitHub all releases](https://img.shields.io/github/downloads/wallpap/PiliPlus/total) 
 </div>
-    <p>使用Flutter开发的BiliBili第三方客户端</p>
+    <p>使用Flutter开发的BiliBili第三方客户端,基于https://github.com/bggRGjQaUbCoE/PiliPlus</p>
     
 <img src="assets/screenshots/510shots_so.png" width="32%" alt="home" />
 <img src="assets/screenshots/174shots_so.png" width="32%" alt="home" />
@@ -112,6 +112,7 @@
 - [x] 删除/置顶/撤回私信
 - [x] 举报用户/评论/视频/动态
 - [x] 删除/发布/置顶文本/图片动态
+- [x] 自定义字体
 - [x] 其他
 
 ## opt
