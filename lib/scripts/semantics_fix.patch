@@ -1,13 +1,14 @@
 diff --git a/packages/flutter/lib/src/semantics/semantics.dart b/packages/flutter/lib/src/semantics/semantics.dart
+index 27a82695a98..5fbb863e3bc 100644
 --- a/packages/flutter/lib/src/semantics/semantics.dart
 +++ b/packages/flutter/lib/src/semantics/semantics.dart
-@@ -3931,6 +3931,9 @@
-        });
-      }
-  
+@@ -3931,6 +3931,9 @@ class SemanticsNode with DiagnosticableTreeMixin {
+       });
+     }
+ 
 +    // Provide a default text direction when none is set (e.g., numeric
 +    // badges, counters). Required by Windows accessibility bridge.
 +    textDirection ??= TextDirection.ltr;
-      return SemanticsData(
-        flagsCollection: flags,
-        actions: _areUserActionsBlocked ? actions & _kUnblockedUserActions : actions,
+     return SemanticsData(
+       flagsCollection: flags,
+       actions: _areUserActionsBlocked ? actions & _kUnblockedUserActions : actions,
