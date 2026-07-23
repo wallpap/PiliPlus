@@ -8,9 +8,9 @@
     <h1>PiliPlus</h1>
 <div align="center">
     
-![GitHub repo size](https://img.shields.io/github/repo-size/bggRGjQaUbCoE/PiliPlus) 
-![GitHub Repo stars](https://img.shields.io/github/stars/bggRGjQaUbCoE/PiliPlus) 
-![GitHub all releases](https://img.shields.io/github/downloads/bggRGjQaUbCoE/PiliPlus/total) 
+![GitHub repo size](https://img.shields.io/github/repo-size/wallpap/PiliPlus) 
+![GitHub Repo stars](https://img.shields.io/github/stars/wallpap/PiliPlus) 
+![GitHub all releases](https://img.shields.io/github/downloads/wallpap/PiliPlus/total) 
 </div>
     <p>使用Flutter开发的BiliBili第三方客户端</p>
     
@@ -204,6 +204,7 @@
   - [x] 高帧率
   - [x] 自动全屏
   - [x] 横屏适配
+  - [x] 自定义字体
 - [ ] 等等
 
 <br/>
@@ -238,28 +239,4 @@
 <br/>
 <br/>
 <br/>
-
-## 更新日志
-
-### v2.2.0 (2026-07-23)
-
-- **平台精简**：移除 iOS/Linux/macOS 支持，专注 Android + Windows
-- **包名更改**：Android `com.example.piliplus` → `com.white.piliplus`
-- **Windows 自定义字体**：支持选择系统中已安装的字体
-- **Bug 修复**：
-  - `VideoDetailController` 非视频页重复报错
-  - `LateInitializationError` 评论时间戳校验
-  - ListTile/ColoredBox 渲染警告
-  - Flutter 3.44.7 SemanticsData 断言兼容
-
 <br/>
-
-## Star History
-
-<a href="https://www.star-history.com/#bggRGjQaUbCoE/PiliPlus&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=bggRGjQaUbCoE/PiliPlus&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=bggRGjQaUbCoE/PiliPlus&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=bggRGjQaUbCoE/PiliPlus&type=Date" />
- </picture>
-</a>

@@ -104,3 +104,7 @@ pili_release.json
 dist
 
 test*
+
+CLAUDE.md
+.vscode
+.claude/
