@@ -11,9 +11,6 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # update when release
@@ -68,10 +65,6 @@ dependencies:
   connectivity_plus: ^7.1.1
   cookie_jar: ^4.0.8
   crypto: ^3.0.6
-  desktop_webview_window:
-    git:
-      url: https://github.com/Predidit/linux_webview_window
-      ref: main
   device_info_plus: ^13.1.0
   dio: ^5.9.1
   dio_http2_adapter: ^2.7.1
@@ -87,6 +80,7 @@ dependencies:
     git:
       url: https://github.com/bggRGjQaUbCoE/flutter_file_picker.git
       ref: dev
+  ffi: ^2.1.3
   fixnum: ^1.1.1
   fl_chart: ^1.0.0
   flex_seed_scheme: ^4.0.1
@@ -139,7 +133,6 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
   permission_handler_android: ^13.0.1
-  permission_handler_apple: ^9.4.7
   permission_handler_platform_interface: ^4.3.0
   pretty_qr_code: ^3.3.0
   protobuf: ^6.0.0
@@ -193,11 +186,6 @@ dependency_overrides:
       url: https://github.com/My-Responsitories/media-kit.git
       path: libs/android/media_kit_libs_android_video
       ref: version_1.2.5
-  media_kit_libs_ios_video:
-    git:
-      url: https://github.com/My-Responsitories/media-kit.git
-      path: libs/ios/media_kit_libs_ios_video
-      ref: version_1.2.5
   media_kit_libs_video:
     git:
       url: https://github.com/My-Responsitories/media-kit.git
@@ -239,17 +227,11 @@ dev_dependencies:
 
 flutter_launcher_icons:
   android: true
-  ios: true
-  remove_alpha_ios: true
   image_path: assets/images/logo/logo_2.png
   image_path_android: assets/images/logo/logo_2.png
-  image_path_ios: assets/images/logo/logo.png
   adaptive_icon_background: "#ffffff"
   adaptive_icon_foreground: assets/images/logo/logo_2.png
   adaptive_icon_monochrome: assets/images/logo/logo_2.png
-  macos:
-    generate: true
-    image_path: assets/images/logo/logo.png
 
 flutter_native_splash:
   android_12:
@@ -269,7 +251,7 @@ flutter:
     - path: assets/images/logo/ico/
       platforms: [windows]
     - path: assets/images/logo/desktop/
-      platforms: [linux, macos]
+      platforms: [windows]
     - path: assets/images/live/
     - path: assets/images/paycoins/
     - path: assets/shaders/

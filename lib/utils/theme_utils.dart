@@ -42,6 +42,7 @@ abstract final class ThemeUtils {
     ThemeData themeData = ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
+      fontFamily: Pref.customFontFamily,
       textTheme: fontWeight == null
           ? null
           : TextTheme(

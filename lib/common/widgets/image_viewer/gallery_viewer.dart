@@ -188,8 +188,6 @@ class _GalleryViewerState extends State<GalleryViewer>
       } else {
         _hideSystemBar = false;
       }
-    } else if (Platform.isIOS) {
-      _hideSystemBar = showSystemBar_;
     } else {
       _hideSystemBar = false;
     }
@@ -591,7 +589,7 @@ class _GalleryViewerState extends State<GalleryViewer>
                 );
               },
               child: Text(
-                '保存${Platform.isIOS ? ' Live Photo' : '视频'}',
+                '保存视频',
                 style: const TextStyle(fontSize: 14),
               ),
             ),

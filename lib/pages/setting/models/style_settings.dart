@@ -42,6 +42,8 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:path/path.dart' as path;
 
+import 'package:PiliPlus/utils/windows/windows_font_helper.dart';
+
 List<SettingsModel> get styleSettings => [
   if (PlatformUtils.isDesktop) ...[
     const SwitchModel(
@@ -59,7 +61,6 @@ List<SettingsModel> get styleSettings => [
       needReboot: true,
     ),
   ],
-  if (Platform.isLinux) _useSSDModel(),
   SwitchModel(
     title: '横屏适配',
     subtitle: '启用横屏布局与逻辑，平板、折叠屏等可开启；建议全屏方向设为【不改变当前方向】',
@@ -95,6 +96,14 @@ List<SettingsModel> get styleSettings => [
       onTap: _showFontWeightDialog,
     ),
   ),
+  if (Platform.isWindows)
+    NormalModel(
+      title: '自定义字体',
+      getSubtitle: () => Pref.customFontFamily ?? '系统默认',
+      leading: const Icon(Icons.font_download_outlined),
+      onTap: (context, setState) =>
+          _showFontFamilyDialog(context, setState),
+    ),
   NormalModel(
     title: '界面缩放',
     getSubtitle: () => '当前缩放比例：${Pref.uiScale.toStringAsFixed(2)}',
@@ -952,4 +961,218 @@ NormalModel _useSSDModel() {
       ),
     ),
   );
+}
+
+Future<void> _showFontFamilyDialog(
+  BuildContext context,
+  VoidCallback setState,
+) async {
+  String? selectedFont = Pref.customFontFamily;
+
+  final result = await showDialog<String?>(
+    context: context,
+    useSafeArea: false,
+    builder: (context) => const _FontFamilyPicker(),
+  );
+
+  if (result != null) {
+    if (result.isEmpty) {
+      await GStorage.setting.delete(SettingBoxKey.customFontFamily);
+    } else {
+      await GStorage.setting.put(SettingBoxKey.customFontFamily, result);
+    }
+    Get.updateMyAppTheme();
+    setState();
+  }
+}
+
+class _FontFamilyPicker extends StatefulWidget {
+  const _FontFamilyPicker();
+
+  @override
+  State<_FontFamilyPicker> createState() => _FontFamilyPickerState();
+}
+
+class _FontFamilyPickerState extends State<_FontFamilyPicker> {
+  List<String>? _fonts;
+  String _query = '';
+  String? _selected;
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = Pref.customFontFamily;
+    _searchController = TextEditingController();
+    _loadFonts();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadFonts() async {
+    // 在 isolate 外调用（win32 涉及 FFI）
+    final fonts = WindowsFontHelper.getSystemFonts();
+    if (mounted) {
+      setState(() => _fonts = fonts);
+    }
+  }
+
+  Iterable<String> get _filteredFonts {
+    if (_fonts == null) return [];
+    if (_query.isEmpty) return _fonts!;
+    final q = _query.toLowerCase();
+    return _fonts!.where((f) => f.toLowerCase().contains(q));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: colorScheme.surface,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 标题栏
+              Padding(
+                padding: const EdgeInsets.only(top: 16, bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '选择字体',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context, ''),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
+            // 搜索栏
+            TextField(
+              controller: _searchController,
+              autofocus: false,
+              decoration: InputDecoration(
+                hintText: '搜索字体名称…',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _query = '');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.3),
+              ),
+              onChanged: (value) => setState(() => _query = value),
+            ),
+            const SizedBox(height: 12),
+            // 列表
+            Expanded(
+              child: _fonts == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: _filteredFonts.length + 1,
+                      itemBuilder: (context, index) {
+                        // 第一项："系统默认"
+                        if (index == 0) {
+                          final isSelected = _selected == null;
+                          return ListTile(
+                            leading: Icon(
+                              isSelected
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: isSelected
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                            ),
+                            title: const Text('系统默认'),
+                            subtitle: const Text('使用 Flutter 默认字体'),
+                            onTap: () {
+                              setState(() => _selected = null);
+                              Navigator.pop(context, '');
+                            },
+                          );
+                        }
+
+                        final font = _filteredFonts.elementAt(index - 1);
+                        final isSelected = _selected == font;
+
+                        return ListTile(
+                          leading: Icon(
+                            isSelected
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_unchecked,
+                            color: isSelected
+                                ? colorScheme.primary
+                                : colorScheme.onSurfaceVariant,
+                          ),
+                          title: Text(
+                            font,
+                            style: TextStyle(fontFamily: font, fontSize: 16),
+                          ),
+                          subtitle: Text(
+                            '你好 · 123 · ABC · The quick brown fox',
+                            style: TextStyle(
+                              fontFamily: font,
+                              fontSize: 13,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() => _selected = font);
+                          },
+                        );
+                      },
+                    ),
+            ),
+            // 底部按钮
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context, ''),
+                      child: const Text('重置为默认'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _selected != Pref.customFontFamily
+                          ? () => Navigator.pop(context, _selected)
+                          : null,
+                      child: const Text('确定'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 }

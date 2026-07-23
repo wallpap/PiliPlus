@@ -108,10 +108,6 @@ class BiliDownloadEntryInfo with MultiSelectData {
                 final String executable;
                 if (Platform.isWindows) {
                   executable = 'explorer';
-                } else if (Platform.isMacOS) {
-                  executable = 'open';
-                } else if (Platform.isLinux) {
-                  executable = 'xdg-open';
                 } else {
                   throw UnimplementedError();
                 }

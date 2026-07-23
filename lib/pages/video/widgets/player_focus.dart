@@ -92,9 +92,6 @@ class PlayerFocus extends StatelessWidget {
     final isKeyQ = key == LogicalKeyboardKey.keyQ;
     if (isKeyQ || key == LogicalKeyboardKey.keyR) {
       if (HardwareKeyboard.instance.isMetaPressed) {
-        if (isKeyQ && Platform.isMacOS) {
-          exit(0);
-        }
         return true;
       }
       if (event is KeyDownEvent) {

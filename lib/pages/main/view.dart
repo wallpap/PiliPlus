@@ -244,9 +244,7 @@ class _MainAppState extends PopScopeState<MainApp>
     } else {
       await trayManager.setIcon(Assets.logoLarge);
     }
-    if (!Platform.isLinux) {
-      await trayManager.setToolTip(Constants.appName);
-    }
+    await trayManager.setToolTip(Constants.appName);
 
     Menu trayMenu = Menu(
       items: [

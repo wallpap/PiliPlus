@@ -466,7 +466,9 @@ class _RenderVideoTime extends RenderBox {
   @override
   void describeSemanticsConfiguration(SemanticsConfiguration config) {
     super.describeSemanticsConfiguration(config);
-    config.label = 'position:$_position\nduration:$_duration';
+    config
+      ..textDirection = TextDirection.ltr
+      ..label = 'position:$_position\nduration:$_duration';
   }
 
   @override

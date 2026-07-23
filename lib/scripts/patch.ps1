@@ -8,10 +8,6 @@ $NewOverScrollIndicator = "362b1de29974ffc1ed6faa826e1df870d7bec75f";
 
 $BottomSheetAndroidPatch = "lib/scripts/bottom_sheet_android.patch"
 
-# https://github.com/bggRGjQaUbCoE/PiliPlus/issues/1906
-$BottomSheetIOSFlutterPatch = "lib/scripts/bottom_sheet_ios_flutter.patch"
-$BottomSheetIOSPiliPlusPatch = "lib/scripts/bottom_sheet_ios_piliplus.patch"
-
 # TODO: remove
 # https://github.com/flutter/flutter/issues/185052
 $TextSelectionMenuFix = "beb2ad17004a1b118ff2bd09f55cee23198f6652";
@@ -57,18 +53,10 @@ $ModalBarrierPatch = "lib/scripts/modal_barrier.patch"
 # https://github.com/flutter/flutter/issues/182466
 $MouseCursorPatch = "lib/scripts/mouse_cursor.patch"
 
-$GeetestIOSPatch = "lib/scripts/geetest_ios.patch"
-
-if ($platform.ToLower() -eq "ios") {
-    git apply $BottomSheetIOSPiliPlusPatch
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "$BottomSheetIOSPiliPlusPatch applied"
-    }
-    git apply $GeetestIOSPatch
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "$GeetestIOSPatch applied"
-    }
-}
+# https://github.com/flutter/flutter/issues/165234
+# Flutter 3.44.7: attributedValue/decreasedValue/increasedValue assertions
+# are too strict for numeric-only semantics values (like counts, badges).
+$SemanticsFixPatch = "lib/scripts/semantics_fix.patch"
 
 Set-Location $env:FLUTTER_ROOT
 
@@ -77,7 +65,8 @@ $reverts = @()
 $patches = @($ModalBarrierPatch, $TextSelectionPatch, $MouseCursorPatch,
             $ImageAnimPatch, $LayoutBuilderPatch, $NavigationDrawerPatch,
             $PopupMenuPatch, $FABPatch, $SelectableRegionPatch, $SelectableRegionSelectionPatch,
-            $EditableTextPatch, $TextFieldPatch, $ScrollPositionPatch)
+            $EditableTextPatch, $TextFieldPatch, $ScrollPositionPatch,
+            $SemanticsFixPatch)
 
 switch ($platform.ToLower()) {
     "android" {
@@ -85,15 +74,6 @@ switch ($platform.ToLower()) {
         $patches += $BottomSheetAndroidPatch
         $patches += $ScrollViewPatch
         $patches += $NavigatorPatch
-    }
-    "ios" {
-        $patches += $ScrollViewPatch
-        $patches += $BottomSheetIOSFlutterPatch
-        $patches += $NavigatorPatch
-    }
-    "linux" {
-    }
-    "macos" {
     }
     "windows" {
     }

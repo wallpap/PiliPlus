@@ -43,7 +43,6 @@ import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:screen_brightness_platform_interface/screen_brightness_platform_interface.dart';
 import 'package:window_manager/window_manager.dart' hide calcWindowPosition;
 
 WebViewEnvironment? webViewEnvironment;
@@ -70,13 +69,11 @@ Future<void> _initDownPath() async {
     } else {
       downloadPath = defDownloadPath;
     }
-  } else if (Platform.isAndroid) {
+  } else {
     final externalStorageDirPath = (await getExternalStorageDirectory())?.path;
     downloadPath = externalStorageDirPath != null
         ? path.join(externalStorageDirPath, PathUtils.downloadDir)
         : defDownloadPath;
-  } else {
-    downloadPath = defDownloadPath;
   }
 }
 
@@ -124,8 +121,6 @@ void main() async {
         ),
       );
     }
-  } else if (Platform.isMacOS) {
-    await setupServiceLocator();
   }
 
   Request();
@@ -144,22 +139,18 @@ void main() async {
         systemNavigationBarContrastEnforced: false,
       ),
     );
-    if (Platform.isAndroid) {
-      FlutterDisplayMode.supported.then((mode) {
-        final String? storageDisplay = GStorage.setting.get(
-          SettingBoxKey.displayMode,
+    FlutterDisplayMode.supported.then((mode) {
+      final String? storageDisplay = GStorage.setting.get(
+        SettingBoxKey.displayMode,
+      );
+      DisplayMode? displayMode;
+      if (storageDisplay != null) {
+        displayMode = mode.firstWhereOrNull(
+          (e) => e.toString() == storageDisplay,
         );
-        DisplayMode? displayMode;
-        if (storageDisplay != null) {
-          displayMode = mode.firstWhereOrNull(
-            (e) => e.toString() == storageDisplay,
-          );
-        }
-        FlutterDisplayMode.setPreferredMode(displayMode ?? DisplayMode.auto);
-      });
-    } else {
-      ScreenBrightnessPlatform.instance.setAutoReset(false);
-    }
+      }
+      FlutterDisplayMode.setPreferredMode(displayMode ?? DisplayMode.auto);
+    });
   } else if (PlatformUtils.isDesktop) {
     await windowManager.ensureInitialized();
 

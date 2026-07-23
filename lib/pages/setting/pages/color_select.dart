@@ -120,10 +120,9 @@ class _ColorSelectPageState extends State<ColorSelectPage> {
               },
             ),
           ),
-          if (!Platform.isIOS)
-            Obx(
-              () => ListTile(
-                title: const Text('动态取色'),
+          Obx(
+            () => ListTile(
+              title: const Text('动态取色'),
                 leading: ExcludeFocus(
                   child: Checkbox(
                     value: ctr.dynamicColor.value,

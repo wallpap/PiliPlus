@@ -313,7 +313,6 @@ class _SavePanelState extends State<SavePanel> {
                 mimeType: 'image/png',
               ),
             ],
-            sharePositionOrigin: await ShareUtils.sharePositionOrigin,
           ),
         );
       } else {

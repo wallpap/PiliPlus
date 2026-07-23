@@ -10,6 +10,11 @@ set(BINARY_NAME "piliplus")
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)
 
+# Suppress CMake 3.31+ CMP0175 dev warnings from third-party plugins using
+# old-style add_custom_command(TARGET) without explicit PRE/POST_BUILD.
+# Must be set as a default policy to propagate into plugin subdirectories.
+set(CMAKE_POLICY_DEFAULT_CMP0175 OLD)
+
 # Define build configuration option.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)
@@ -31,6 +36,9 @@ set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 # Use Unicode for all projects.
 add_definitions(-DUNICODE -D_UNICODE)
+
+# Suppress MSVC warnings from third-party code (plugins and SDK headers).
+add_compile_options(/wd"4244" /wd"4458")
 
 # Compilation settings that should be applied to most targets.
 #

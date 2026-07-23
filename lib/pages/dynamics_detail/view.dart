@@ -33,9 +33,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 const Set<TargetPlatform> _kDesktopPlatforms = <TargetPlatform>{
-  TargetPlatform.macOS,
   TargetPlatform.windows,
-  TargetPlatform.linux,
 };
 
 class DynamicDetailPage extends StatefulWidget {

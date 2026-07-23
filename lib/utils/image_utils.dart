@@ -7,7 +7,6 @@ import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/http/init.dart';
 import 'package:PiliPlus/utils/cache_manager.dart';
 import 'package:PiliPlus/utils/device_utils.dart';
-import 'package:PiliPlus/utils/extension/file_ext.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/path_utils.dart';
@@ -20,15 +19,12 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:live_photo_maker/live_photo_maker.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 
 abstract final class ImageUtils {
   static bool silentDownImg = Pref.silentDownImg;
-  static final _albumPath = Platform.isAndroid
-      ? 'Pictures/${Constants.appName}'
-      : Constants.appName;
+  static final _albumPath = 'Pictures/${Constants.appName}';
 
   // 图片分享
   static Future<void> onShareImg(String url) async {
@@ -41,7 +37,6 @@ abstract final class ImageUtils {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(res.path)],
-          sharePositionOrigin: await ShareUtils.sharePositionOrigin,
         ),
       );
     } catch (e) {
@@ -106,33 +101,13 @@ abstract final class ImageUtils {
       final res = await Request().downloadFile(liveUrl.http2https, videoPath);
       if (res.statusCode != 200) throw '${res.statusCode}';
 
-      if (Platform.isIOS) {
-        final imageFile = await CacheManager.manager.getSingleFile(
-          url.http2https,
-        );
-        if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
-        bool success = await LivePhotoMaker.create(
-          coverImage: imageFile.path,
-          imagePath: null,
-          voicePath: videoPath,
-          width: width,
-          height: height,
-        ).whenComplete(File(videoPath).tryDel);
-        if (success) {
-          SmartDialog.showToast(' 已保存 ');
-        } else {
-          SmartDialog.showToast('保存失败');
-          return false;
-        }
-      } else {
-        if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
-        await saveFileImg(
-          filePath: videoPath,
-          fileName: videoName,
-          type: FileType.video,
-          needToast: true,
-        );
-      }
+      if (!silentDownImg) SmartDialog.showLoading(msg: '正在保存');
+      await saveFileImg(
+        filePath: videoPath,
+        fileName: videoName,
+        type: FileType.video,
+        needToast: true,
+      );
       return true;
     } catch (err) {
       SmartDialog.showToast(err.toString());

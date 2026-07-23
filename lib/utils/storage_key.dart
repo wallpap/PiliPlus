@@ -216,6 +216,7 @@ abstract final class SettingBoxKey {
       defaultTextScale = 'textScale',
       dynamicColor = 'dynamicColor',
       customColor = 'customColor',
+      customFontFamily = 'customFontFamily',
       displayMode = 'displayMode',
       smallCardWidth = 'smallCardWidth',
       recommendCardWidth = 'recommendCardWidth',

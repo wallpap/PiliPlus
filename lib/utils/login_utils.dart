@@ -19,9 +19,6 @@ import 'package:get/get.dart';
 
 abstract final class LoginUtils {
   static FutureOr setWebCookie([Account? account]) {
-    if (Platform.isLinux) {
-      return null;
-    }
     final cookies = (account ?? Accounts.main).cookieJar.toList();
     final webManager = web.CookieManager.instance(
       webViewEnvironment: webViewEnvironment,
@@ -86,10 +83,9 @@ abstract final class LoginUtils {
       ..isLogin.value = false;
 
     return Future.wait([
-      if (!Platform.isLinux)
-        web.CookieManager.instance(
-          webViewEnvironment: webViewEnvironment,
-        ).deleteAllCookies(),
+      web.CookieManager.instance(
+        webViewEnvironment: webViewEnvironment,
+      ).deleteAllCookies(),
       GStorage.userInfo.delete('userInfoCache'),
     ]);
   }

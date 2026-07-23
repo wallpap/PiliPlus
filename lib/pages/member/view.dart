@@ -691,13 +691,7 @@ class _MemberPageState extends State<MemberPage> {
   }
 
   void _createShortcut() {
-    if (Platform.isIOS) {
-      PageUtils.launchURL(
-        'https://www.bilibili.com/blackboard/disablelink/go-to-up-space.html?mid=$_mid',
-      );
-    } else if (Platform.isAndroid) {
-      _createShortcutAndroid();
-    }
+    _createShortcutAndroid();
   }
 
   Future<void> _createShortcutAndroid() async {

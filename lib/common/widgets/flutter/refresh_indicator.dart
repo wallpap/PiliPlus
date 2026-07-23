@@ -545,7 +545,7 @@ class RefreshIndicatorState extends State<RefreshIndicator>
           ),
       ],
     );
-    if (PlatformUtils.isDarwin) {
+    if (false) { // was PlatformUtils.isDarwin, removed iOS/macOS
       if (widget.isClampingScrollPhysics) {
         return ScrollConfiguration(
           behavior: RefreshScrollBehavior(

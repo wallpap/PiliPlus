@@ -846,16 +846,19 @@ class ReplyItemGrpc extends StatelessWidget {
           );
         } else if (_timeRegExp.hasMatch(matchStr)) {
           matchStr = matchStr.replaceAll('：', ':');
+          final heroTag = getTag?.call() ?? Get.arguments['heroTag'];
+          final hasVideoCtr =
+              heroTag != null &&
+              Get.isRegistered<VideoDetailController>(tag: heroTag);
           bool isValid = false;
-          try {
-            final ctr = Get.find<VideoDetailController>(
-              tag: getTag?.call() ?? Get.arguments['heroTag'],
-            );
-            isValid =
-                DurationUtils.parseDuration(matchStr) * 1000 <=
-                ctr.data.timeLength!;
-          } catch (e) {
-            if (kDebugMode) debugPrint('failed to validate: $e');
+          if (hasVideoCtr) {
+            try {
+              final ctr =
+                  Get.find<VideoDetailController>(tag: heroTag);
+              isValid =
+                  DurationUtils.parseDuration(matchStr) * 1000 <=
+                  (ctr.data.timeLength ?? 0);
+            } catch (_) {}
           }
           spanChildren.add(
             TextSpan(
@@ -864,19 +867,19 @@ class ReplyItemGrpc extends StatelessWidget {
               recognizer: isValid
                   ? (NoDeadlineTapGestureRecognizer()
                       ..onTap = () {
-                        // 跳转到指定位置
-                        try {
-                          SmartDialog.showToast('跳转至：$matchStr');
+                        SmartDialog.showToast('跳转至：$matchStr');
+                        if (Get.isRegistered<VideoDetailController>(
+                          tag: Get.arguments['heroTag'],
+                        )) {
                           Get.find<VideoDetailController>(
                             tag: Get.arguments['heroTag'],
                           ).plPlayerController.seekTo(
                             Duration(
-                              seconds: DurationUtils.parseDuration(matchStr),
+                              seconds:
+                                  DurationUtils.parseDuration(matchStr),
                             ),
                             isSeek: false,
                           );
-                        } catch (e) {
-                          SmartDialog.showToast('跳转失败: $e');
                         }
                       })
                   : null,

@@ -548,7 +548,7 @@ abstract final class Pref {
 
   static bool get slideDismissReplyPage => _setting.get(
     SettingBoxKey.slideDismissReplyPage,
-    defaultValue: Platform.isIOS,
+    defaultValue: false,
   );
 
   static bool get showFSActionItem =>
@@ -589,6 +589,10 @@ abstract final class Pref {
 
   static int get appFontWeight =>
       _setting.get(SettingBoxKey.appFontWeight, defaultValue: -1);
+
+  /// null = 系统默认字体
+  static String? get customFontFamily =>
+      _setting.get(SettingBoxKey.customFontFamily, defaultValue: null);
 
   static bool get enableDragSubtitle =>
       _setting.get(SettingBoxKey.enableDragSubtitle, defaultValue: false);
@@ -731,7 +735,6 @@ abstract final class Pref {
       _setting.get(SettingBoxKey.customColor, defaultValue: 0);
 
   static bool get dynamicColor =>
-      !Platform.isIOS &&
       _setting.get(SettingBoxKey.dynamicColor, defaultValue: true);
 
   static bool get enableSystemProxy =>
